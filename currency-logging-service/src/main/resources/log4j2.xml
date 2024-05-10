@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+           <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%X{traceId},%X{spanId}] %m%n " />
+           
+           <!--<PatternLayout >
+			  <pattern>[%d{yy-MMM-dd HH:mm:ss}] %5p [%X{SOFA-TraceId},%X{SOFA-SpanId}] [%-5level] [%logger{36}] - %msg%n</pattern>
+			  <level>%5p [${spring.application.name},%X{traceId:-},%X{spanId:-}]</level>
+		   </PatternLayout>-->
+            
+        </Console>
+        <SplunkHttp
+                name="splunkhttp"
+                url="http://localhost:8088"
+                token="bc99aaf8-249b-4528-957f-251933a22545"
+                host="localhost"
+                index="auth_service_idx"
+                type="raw"
+                source="http-event-logs"
+                sourcetype="log4j"
+                messageFormat="text"
+                disableCertificateValidation="true">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%X{traceId},%X{spanId}] %m%n" />
+        </SplunkHttp>
+
+    </Appenders>
+
+    <Loggers>
+        <!-- LOG everything at INFO level -->
+        <Root level="info">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="splunkhttp" />
+        </Root>
+    </Loggers>
+</Configuration>
